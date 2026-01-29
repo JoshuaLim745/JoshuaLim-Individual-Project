@@ -1,12 +1,26 @@
+import os
+
 #Global variables
 gameOngoing = True
-playerTurn = True
+playerNumber = 1 #Player with black tile starts first
+totalTiles = [4,2,2] #For score keeping and make it so that there is no need to a loop at the end to count the tiles
+"""
+index 0 - Total Tiles played
+index 1 - No. Black tiles
+index 2 - No. White tiles
+"""
+moveCounter = 1
+passCounter = 0
+""" 
+0 - Current player has an avalible move to play
+1 - A player has to pass so allow the other player to move. Pass is occured when the current player has no possible moves to make
+2 - Both players pass so we now can end the game
+"""
 gameBoard = [[0]* 8 for i in range(8)]
-
-gameBoard[3][3] = 1
-gameBoard[3][4] = -1
-gameBoard[4][3] = -1
-gameBoard[4][4] = 1
+gameBoard[3][3] = -1
+gameBoard[3][4] = 1
+gameBoard[4][3] = 1
+gameBoard[4][4] = -1
 rows = [ f'{i}' for i in range(8)]
 
 
@@ -15,7 +29,7 @@ def printingBoard():
     symbols = {1: 'b', -1: 'w', 0: '#', 9: 'A'}
     for i in range(8):
         if i == 0:
-            print(" ", end="  ")
+            print("", end="  ")
             print( *rows, sep = ', ')
 
         print(i, ", ".join(symbols[cell] for cell in gameBoard[i]))
@@ -136,47 +150,94 @@ def findAvaliableMoves(playerNumber):
 
     return playableCells
 
-# The game code itself / main
 
 
-    """ 
-    TODO: 
-    Possible ideas is to just keep an internal track of this
-    so just flip flop between w -> b -> w -> b
+def tileSwapping(x, y, playerNumber):
+    tilesToSwap = swappableTiles(x, y, playerNumber)
+    totalTiles[playerNumber] += 1
+    for tile in tilesToSwap:
+        x, y = tile
+        gameBoard[x][y] = playerNumber
+        totalTiles[playerNumber] += 1
+        totalTiles[-playerNumber] -= 1
 
-    The only case where this breaks is when one player has no possible move to make
-    Which is where this function could be called and used to enforce the flip flop. 
-    """
+
+
+
+
+""" 
+TODO: 
+For the heuristic - maybe can define 
+
+Double nested while loop? -
+Outer loop - To allow for continoues game play. Create a function where if called it resets the whole game after a game is finished
+Inner loop - The gameplay itself
+
+PLAN
+1. Let it run for a definite amount (Number of games to be played? or time based also can (then we can find speed of games played? ))
+of time between 2 heuristics - Repeat for all combination of pairs (Will most likely have 4 different heuristics / "Player level")
+So that means that there is 6 combinations.
+2. Outer loop will deal with the winners and losers. When game ends record results (win rate, draw rate and lost rate (Could be more here)) and 
+"""
+
+""" 
+Extra note for me
+Downwards = x
+left to right = y
+"""
 
 
 while(gameOngoing):
 
-    if playerTurn == True:
-        playerNumber = 1
-    else:
-        playerNumber = -1
+    """ 
+    playerNumber = 1 #Black Tile
+    playerNumber = -1 #White Tile
+    """
 
     avaliableMoves = findAvaliableMoves(playerNumber)
 
+    # Checks if the current player has a playable move
     if len(avaliableMoves) == 0:
-        playerTurn = not(playerTurn)
-        continue
+        playerNumber *= -1
+        passCounter += 1
     else:
-        playerTurn = not(playerTurn)
-        
-
-        for playableMoves in avaliableMoves:
-            x, y = playableMoves
-            gameBoard[x][y] = 9
+        #Removing terminal clutter 
+        os.system('cls' if os.name == 'nt' else 'clear')
+        if playerNumber == 1:
+            print("Move ", moveCounter,":Black Move")
+        else:
+            print("Move ", moveCounter,":White Move")
+        passCounter = 0
+        # Just to display the current playable moves. Can delete if needed to. 
         printingBoard()
+        print(avaliableMoves, "\n")
 
+        # Taking user input - Will eventually be swapped out with some getMove from a class. 
         userX = int(input("Move in the X coordinate \n"))
         userY = int(input("Move in the Y coordinate \n"))
+
+        if (userX, userY) in avaliableMoves:
+            gameBoard[userX][userY] = playerNumber
+            totalTiles[0] += 1
+            tileSwapping(userX, userY, playerNumber)
+        else:
+            print("Not valid move")
         printingBoard()
-        userAnswer = 'n'
-        if userAnswer == 'n':
-            gameOngoing = False
+        playerNumber *= -1
 
 
+                                                                #Change the greater than or equal to also
+    if (passCounter == 2 or totalTiles[0] >= 64 ) : 
+        gameOngoing = False
 
 
+print("Total Tiles in play: ",totalTiles[0], "\n")
+print("Total Black Tiles in play: ",totalTiles[1], "\n")
+print("Total White Tiles in play: ",totalTiles[2], "\n")
+
+if(totalTiles[1] > totalTiles[2]):
+    print("Black Wins", "\n")
+elif (totalTiles[1] < totalTiles[2]):
+    print("White Wins", "\n")
+else:
+    print("Draw", "\n")
