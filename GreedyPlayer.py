@@ -1,0 +1,3 @@
+
+def greedyAlgorithm(gameBoard):
+    
