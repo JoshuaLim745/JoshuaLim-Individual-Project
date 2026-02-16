@@ -9,4 +9,14 @@ weights = [
     [100, -20, 10,  5,  5, 10, -20, 100]
 ]
 
-def cornerAlgorithm():
+def cornerAlgorithm(gameBoard, playerNumber):
+    score = 0
+    for row in range(8):
+        for col in range (8):
+            if gameBoard[row][col] == playerNumber:
+                score += weights[row][col]
+
+            elif gameBoard[row][col] == -playerNumber:
+                score -= weights[row][col]
+
+    return score

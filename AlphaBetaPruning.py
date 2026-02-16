@@ -1,15 +1,20 @@
 from OthelloBoardLogic import findAvaliableMoves, tileSwapping
 from FrontierDisk import frontierAlgorithm
+from CornerOccupany import cornerAlgorithm
 import copy
 
 # https://www.geeksforgeeks.org/dsa/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
 # https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
-# set alpha to -inf and beta to inf, maximizingPlayer = true
+
 def AlphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumber, heuristic):
     avaliableMoves = findAvaliableMoves(gameBoard, playerNumber)
     if depth == 0 or not avaliableMoves:
         if heuristic == "Frontier":
             return frontierAlgorithm(gameBoard, playerNumber)
+        
+        elif heuristic =="Corner":
+            return cornerAlgorithm(gameBoard, playerNumber)
+        
         else:
             return 0
 

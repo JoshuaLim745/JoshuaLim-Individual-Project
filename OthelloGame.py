@@ -62,7 +62,7 @@ def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, moveCount
         playerNumber = -1 #White Tile
         """
         avaliableMoves = findAvaliableMoves(gameBoard, playerNumber)
-
+        depth = 6
         # Checks if the current player has a playable move
         if len(avaliableMoves) == 0:
             playerNumber *= -1
@@ -79,11 +79,11 @@ def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, moveCount
             elif currentPlayer == "Greed":
                 moveX, moveY = greedyAlgorithm(gameBoard, playerNumber, avaliableMoves, totalTiles)
             elif currentPlayer == "Corner":
-                depth = 6
+                
                 heuristic = "Corner"
                 moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic)
             elif currentPlayer == "Frontier":
-                depth = 6
+
                 heuristic = "Frontier"
                 moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic)
 
