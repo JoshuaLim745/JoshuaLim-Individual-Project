@@ -1,22 +1,35 @@
 from OthelloBoardLogic import findAvaliableMoves, tileSwapping
 from FrontierDisk import frontierAlgorithm
 from CornerOccupany import cornerAlgorithm
+import random
 import copy
 
 # https://www.geeksforgeeks.org/dsa/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
 # https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
 
-def AlphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumber, heuristic):
+def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumber, heuristic, originalPlayerNumber):
     avaliableMoves = findAvaliableMoves(gameBoard, playerNumber)
-    if depth == 0 or not avaliableMoves:
+    opponentMoves = findAvaliableMoves(gameBoard, -playerNumber)
+
+    if depth == 0:
         if heuristic == "Frontier":
-            return frontierAlgorithm(gameBoard, playerNumber)
+            return frontierAlgorithm(gameBoard, originalPlayerNumber)
         
         elif heuristic =="Corner":
-            return cornerAlgorithm(gameBoard, playerNumber)
-        
-        else:
-            return 0
+            return cornerAlgorithm(gameBoard, originalPlayerNumber)
+    
+    if not avaliableMoves:
+        opponentMoves = findAvaliableMoves(gameBoard, -playerNumber)
+        if not opponentMoves: 
+            # No player has a move
+            if heuristic == "Frontier":
+                return frontierAlgorithm(gameBoard, originalPlayerNumber)
+            
+            elif heuristic =="Corner":
+                return cornerAlgorithm(gameBoard, originalPlayerNumber)
+        # Current player has no moves, but opponent does.
+        # We update playerNumber and maximizingPlayer a accodingly
+        return alphaBetaPruning(gameBoard, depth-1, alpha, beta, not maximizingPlayer, -playerNumber, heuristic, originalPlayerNumber)
 
 
     if maximizingPlayer:
@@ -24,10 +37,9 @@ def AlphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
 
         for move in avaliableMoves:
             tempBoard = [row[:] for row in gameBoard]
-            tempTiles = [0,0,0]
             moveX, moveY = move
-            tempBoard, tempTiles = tileSwapping(tempBoard, tempTiles, moveX, moveY, playerNumber)
-            bestValue =  max(bestValue, AlphaBetaPruning(tempBoard, depth-1, alpha, beta, False, playerNumber, heuristic))
+            tempBoard = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
+            bestValue =  max(bestValue, alphaBetaPruning(tempBoard, depth-1, alpha, beta, False, -playerNumber, heuristic, originalPlayerNumber))
 
             if bestValue >= beta:
                 break
@@ -42,10 +54,9 @@ def AlphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
 
         for move in avaliableMoves:
             tempBoard = [row[:] for row in gameBoard]
-            tempTiles = [0,0,0]
             moveX, moveY = move
-            tempBoard, tempTiles = tileSwapping(tempBoard, tempTiles, moveX, moveY, playerNumber)
-            minValue =  min(minValue, AlphaBetaPruning(tempBoard, depth-1, alpha, beta, True, playerNumber, heuristic))
+            tempBoard = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
+            minValue =  min(minValue, alphaBetaPruning(tempBoard, depth-1, alpha, beta, True, -playerNumber, heuristic, originalPlayerNumber))
 
             if minValue <= alpha:
                 break
@@ -55,24 +66,31 @@ def AlphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
         return minValue
     
 
-def getBestMove(gameBoard, depth, playerNumber, heuristic):
-    availableMoves = findAvaliableMoves(gameBoard, playerNumber)
-    if not availableMoves:
+def getBestMove(gameBoard, depth, playerNumber, heuristic, avaliableMoves):
+
+    if not avaliableMoves:
         return None
-    
-    bestMove = None
-    bestValue = float("-inf")
-    
-    for move in availableMoves:
+
+    bestMoves = []
+    alpha = float("-inf")
+    originalPlayerNumber = playerNumber
+    for move in avaliableMoves:
         tempBoard = [row[:] for row in gameBoard]
         tempTiles = [0,0,0]
         moveX, moveY = move
         tempBoard, tempTiles = tileSwapping(tempBoard, tempTiles, moveX, moveY, playerNumber)
         
-        boardValue = AlphaBetaPruning(tempBoard, depth-1, float("-inf"), float("inf"), False, playerNumber, heuristic)
+        boardValue = alphaBetaPruning(tempBoard, depth-1, alpha, float("inf"), False, -playerNumber, heuristic, originalPlayerNumber)
         
-        if boardValue > bestValue:
-            bestValue = boardValue
-            bestMove = move
-            
-    return bestMove
+        if boardValue > alpha:
+            alpha = boardValue
+            bestMoves = [move]
+        elif boardValue == alpha:
+            bestMoves.append(move)
+
+    if bestMoves:
+        return random.choice(bestMoves)
+    
+    else:
+        return None
+    

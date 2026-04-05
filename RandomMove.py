@@ -1,3 +1,3 @@
 import random
-def randomMoveSelector(listOfMoves):
-    return random.choice(listOfMoves)
+def randomMoveSelector(availableMoves):
+    return random.choice(availableMoves)

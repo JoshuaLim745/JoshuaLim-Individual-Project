@@ -47,7 +47,7 @@ def initializeBooleans():
 
     return (blackWinGameOne, whiteWinGameOne, blackWinGameTwo, whiteWinGameTwo, drawGame)
 
-def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, moveCounter, totalTiles):
+def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, totalTiles):
     passCounter = 0
     """ 
     0 - Current player has an avalible move to play
@@ -74,30 +74,34 @@ def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, moveCount
             else:
                 currentPlayer = whiteStrategy
 
+
+
+            #Chooses one of the heuristics to use to select a move
             if currentPlayer == "Random":
                 moveX, moveY = randomMoveSelector(avaliableMoves)
+
             elif currentPlayer == "Greed":
                 moveX, moveY = greedyAlgorithm(gameBoard, playerNumber, avaliableMoves, totalTiles)
-            elif currentPlayer == "Corner":
-                
-                heuristic = "Corner"
-                moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic)
-            elif currentPlayer == "Frontier":
 
+            elif currentPlayer == "Corner":
+                heuristic = "Corner"
+                moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic, avaliableMoves)
+
+            elif currentPlayer == "Frontier":
                 heuristic = "Frontier"
-                moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic)
+                moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic, avaliableMoves)
 
             if (moveX, moveY) in avaliableMoves:
                 gameBoard[moveX][moveY] = playerNumber
                 totalTiles[0] += 1
                 gameBoard, totalTiles = tileSwapping(gameBoard, totalTiles, moveX, moveY, playerNumber)
+            else:
+                print("Non existent move played")
 
             playerNumber *= -1
-            moveCounter += 1
 
         if (passCounter == 2 or totalTiles[0] >= 64):
             gameOngoing = False
-            print(totalTiles)
             if totalTiles[1] > totalTiles[2]:
                 return 1  # Black Wins
             elif totalTiles[2] > totalTiles[1]:

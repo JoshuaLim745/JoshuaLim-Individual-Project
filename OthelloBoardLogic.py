@@ -1,28 +1,34 @@
+# Game Logic functions
+# Help from - https://www.youtube.com/watch?v=rvLfF9hciU8
+# Link in video description of video above - https://github.com/GrizzlyH/Othello_Tutorial/blob/master/Main%205/main5.py
+
+
 def directions(rowValue, colValue):
     """ Check to determine which directions are valid from current cell """
     # all cardinal and ordinal directions
     # North, South, East, West, NE, SE, NW, SW
     validDirections = []
 
-    if rowValue != 0: validDirections.append((rowValue-1, colValue))  # West
-    if rowValue != 0 and colValue != 0: validDirections.append((rowValue-1, colValue-1)) # SW
-    if rowValue != 0 and colValue != 7: validDirections.append((rowValue-1, colValue+1)) # NW
+    if rowValue != 0: 
+        validDirections.append((rowValue-1, colValue))  # West
+    if rowValue != 0 and colValue != 0: 
+        validDirections.append((rowValue-1, colValue-1)) # SW
+    if rowValue != 0 and colValue != 7: 
+        validDirections.append((rowValue-1, colValue+1)) # NW
 
-    if rowValue != 7: validDirections.append((rowValue+1, colValue)) # East
-    if rowValue != 7 and colValue != 0: validDirections.append((rowValue+1, colValue-1)) # SE
-    if rowValue != 7 and colValue != 7: validDirections.append((rowValue+1, colValue+1)) # NE
+    if rowValue != 7: 
+        validDirections.append((rowValue+1, colValue)) # East
+    if rowValue != 7 and colValue != 0: 
+        validDirections.append((rowValue+1, colValue-1)) # SE
+    if rowValue != 7 and colValue != 7: 
+        validDirections.append((rowValue+1, colValue+1)) # NE
 
-    if colValue != 0: validDirections.append((rowValue, colValue-1)) # South
-    if colValue != 7: validDirections.append((rowValue, colValue+1)) # North
+    if colValue != 0: 
+        validDirections.append((rowValue, colValue-1)) # South
+    if colValue != 7: 
+        validDirections.append((rowValue, colValue+1)) # North
 
     return validDirections
-
-
-
-# Game Logic functions
-# Help from - https://www.youtube.com/watch?v=rvLfF9hciU8
-# Link in video description of video above - https://github.com/GrizzlyH/Othello_Tutorial/blob/master/Main%205/main5.py
-# https://www.worldothello.org/about/about-othello/othello-rules/official-rules/english
 
 def findValidCells(gameBoard, playerNumber):
 
@@ -33,7 +39,7 @@ def findValidCells(gameBoard, playerNumber):
         for col in range(8):
 
             if gameBoard[row][col] != 0:
-                continue # if cell in # go next value
+                continue # if cell is '#' go to the next value
 
             # to determine what cells are valid around a certain cell. 
             eightDirections = directions(row, col)
