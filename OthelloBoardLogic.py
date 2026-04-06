@@ -39,7 +39,7 @@ def findValidCells(gameBoard, playerNumber):
         for col in range(8):
 
             if gameBoard[row][col] != 0:
-                continue # if cell is '#' go to the next value
+                continue # if cell is empty go to the next value
 
             # to determine what cells are valid around a certain cell. 
             eightDirections = directions(row, col)

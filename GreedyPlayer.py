@@ -1,10 +1,11 @@
 from OthelloBoardLogic import tileSwapping
 import copy
+import random
 
 def greedyAlgorithm(gameBoard, playerNumber, availableMoves, totalTiles):
     initialNum = totalTiles[playerNumber]
     largestNumFlipped = -1
-    bestMove = (-1,-1)
+    bestMove = []
     for i in (availableMoves):
         tempBoard = copy.deepcopy(gameBoard)
         tempTiles = copy.deepcopy(totalTiles)
@@ -17,7 +18,9 @@ def greedyAlgorithm(gameBoard, playerNumber, availableMoves, totalTiles):
         temp = tempTiles[playerNumber]
 
         if (temp - initialNum) > largestNumFlipped:
-            bestMove = (moveX, moveY)
+            bestMove = [(moveX, moveY)]
             largestNumFlipped = temp
+        elif (temp - initialNum) == largestNumFlipped:
+            bestMove.append((moveX, moveY))
 
-    return bestMove
+    return random.choice(bestMove)

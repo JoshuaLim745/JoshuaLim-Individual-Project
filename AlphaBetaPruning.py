@@ -28,7 +28,7 @@ def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
             elif heuristic =="Corner":
                 return cornerAlgorithm(gameBoard, originalPlayerNumber)
         # Current player has no moves, but opponent does.
-        # We update playerNumber and maximizingPlayer a accodingly
+        # We update playerNumber and maximizingPlayer accodingly
         return alphaBetaPruning(gameBoard, depth-1, alpha, beta, not maximizingPlayer, -playerNumber, heuristic, originalPlayerNumber)
 
 
@@ -38,7 +38,7 @@ def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
         for move in avaliableMoves:
             tempBoard = [row[:] for row in gameBoard]
             moveX, moveY = move
-            tempBoard = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
+            tempBoard, ignoreValues = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
             bestValue =  max(bestValue, alphaBetaPruning(tempBoard, depth-1, alpha, beta, False, -playerNumber, heuristic, originalPlayerNumber))
 
             if bestValue >= beta:
@@ -55,7 +55,7 @@ def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
         for move in avaliableMoves:
             tempBoard = [row[:] for row in gameBoard]
             moveX, moveY = move
-            tempBoard = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
+            tempBoard, ignoreValues = tileSwapping(tempBoard, [0,0,0], moveX, moveY, playerNumber)
             minValue =  min(minValue, alphaBetaPruning(tempBoard, depth-1, alpha, beta, True, -playerNumber, heuristic, originalPlayerNumber))
 
             if minValue <= alpha:
