@@ -8,27 +8,28 @@ drawScore, blackStrategyScore, whiteStrategyScore = 0, 0, 0
 random.seed("JoshuaLimYon")
 
 if __name__ == "__main__":
-    startTime = time.time()
 
     for blackStrategy in strategyList:
         for whiteStrategy in strategyList:
+            startTime = time.time()
             blackStrategyScore, whiteStrategyScore, drawScore = oneRotation(blackStrategy, whiteStrategy, 50)
 
 
-            print("Black Strategy:", blackStrategy)
-            print("Black Win Score:", blackStrategyScore)
+            with open("smallScale.txt", "a") as f:
+                print("Black Strategy:", blackStrategy, file=f)
+                print("Black Win Score:", blackStrategyScore, file=f)
 
-            print("-" * 15)
-            print("White Strategy:", whiteStrategy)
-            print("White Win Score:", whiteStrategyScore)
+                print("-" * 15, file=f)
+                print("White Strategy:", whiteStrategy, file=f)
+                print("White Win Score:", whiteStrategyScore, file=f)
 
-            print("-" * 15)
-            print("Draw Score:", drawScore)
-            print("-" * 15)
+                print("-" * 15, file=f)
+                print("Draw Score:", drawScore, file=f)
+                print("-" * 15, file=f)
+                
+                endTime = time.time()
+                print("Time Taken:", (endTime - startTime), file=f)
+                print("-" * 15, file=f)
 
-            print()
-            print()
-
-    endTime = time.time()
-
-    print("Time Taken:", (endTime - startTime))
+                
+                print("\n", file=f)

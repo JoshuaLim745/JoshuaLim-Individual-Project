@@ -12,8 +12,8 @@ if __name__ == "__main__":
 
     for blackStrategy in strategyList:
         for whiteStrategy in strategyList:
+            
             blackStrategyScore, whiteStrategyScore, drawScore = oneRotation(blackStrategy, whiteStrategy, 25)
-
 
             print("Black Strategy:", blackStrategy)
             print("Black Win Score:", blackStrategyScore)
