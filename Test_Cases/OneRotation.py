@@ -7,7 +7,6 @@ from OthelloGame import playTheGame, initializeGame, randomizedStartingBoard, in
 def oneRotation(blackStrategy, whiteStrategy, loopCount):
     blackScore, whiteScore, drawScore = 0, 0, 0
     for i in range(loopCount):
-        print("Game",i)
         blackWinGameOne, whiteWinGameOne, blackWinGameTwo, whiteWinGameTwo, drawGame = initializeBooleans()
         playerNumber, totalTiles, gameOngoing, gameBoard = initializeGame()
 
