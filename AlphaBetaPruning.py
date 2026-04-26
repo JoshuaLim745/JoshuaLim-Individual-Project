@@ -1,22 +1,20 @@
 from OthelloBoardLogic import findAvaliableMoves, tileSwapping
 from FrontierDisk import frontierAlgorithm
-from CornerOccupany import cornerAlgorithm
+from WeightedPosition import weightedPositionAlgorithm
 import random
-import copy
 
 # https://www.geeksforgeeks.org/dsa/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
 # https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
 
 def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumber, heuristic, originalPlayerNumber):
     avaliableMoves = findAvaliableMoves(gameBoard, playerNumber)
-    opponentMoves = findAvaliableMoves(gameBoard, -playerNumber)
 
     if depth == 0:
         if heuristic == "Frontier":
             return frontierAlgorithm(gameBoard, originalPlayerNumber)
         
-        elif heuristic =="Corner":
-            return cornerAlgorithm(gameBoard, originalPlayerNumber)
+        elif heuristic =="weightedPosition":
+            return weightedPositionAlgorithm(gameBoard, originalPlayerNumber)
     
     if not avaliableMoves:
         opponentMoves = findAvaliableMoves(gameBoard, -playerNumber)
@@ -25,8 +23,8 @@ def alphaBetaPruning(gameBoard, depth, alpha, beta, maximizingPlayer, playerNumb
             if heuristic == "Frontier":
                 return frontierAlgorithm(gameBoard, originalPlayerNumber)
             
-            elif heuristic =="Corner":
-                return cornerAlgorithm(gameBoard, originalPlayerNumber)
+            elif heuristic =="weightedPosition":
+                return weightedPositionAlgorithm(gameBoard, originalPlayerNumber)
         # Current player has no moves, but opponent does.
         # We update playerNumber and maximizingPlayer accodingly
         return alphaBetaPruning(gameBoard, depth-1, alpha, beta, not maximizingPlayer, -playerNumber, heuristic, originalPlayerNumber)

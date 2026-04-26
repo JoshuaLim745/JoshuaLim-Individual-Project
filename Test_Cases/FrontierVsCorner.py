@@ -2,7 +2,7 @@ from OneRotation import oneRotation
 import random
 import time
 
-strategyList = ["Corner", "Frontier"]
+strategyList = ["weightedPosition", "Frontier"]
 
 drawScore, blackStrategyScore, whiteStrategyScore = 0, 0, 0
 random.seed("JoshuaLim")

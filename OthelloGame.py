@@ -83,8 +83,8 @@ def playTheGame(blackStrategy, whiteStrategy, gameBoard, playerNumber, totalTile
             elif currentPlayer == "Greed":
                 moveX, moveY = greedyAlgorithm(gameBoard, playerNumber, avaliableMoves, totalTiles)
 
-            elif currentPlayer == "Corner":
-                heuristic = "Corner"
+            elif currentPlayer == "weightedPosition":
+                heuristic = "weightedPosition"
                 moveX, moveY = getBestMove(gameBoard, depth, playerNumber, heuristic, avaliableMoves)
 
             elif currentPlayer == "Frontier":

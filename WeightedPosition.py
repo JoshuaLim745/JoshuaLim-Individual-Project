@@ -9,7 +9,7 @@ weights = [
     [100, -20, 10,  5,  5, 10, -20, 100]
 ]
 
-def cornerAlgorithm(gameBoard, playerNumber):
+def weightedPositionAlgorithm(gameBoard, playerNumber):
     score = 0
     for row in range(8):
         for col in range (8):
