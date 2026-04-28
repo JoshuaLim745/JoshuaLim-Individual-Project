@@ -21,5 +21,5 @@
 ### How to run
 1. cd Test_Cases
 2. python filename.py  
-(Note: all files can be run except for OneRotation.py)
+(Note: all test files can be run except for OneRotation.py as that is just a function)
 
